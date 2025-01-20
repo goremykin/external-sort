@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using ExternalSort.Generator;
 
-var fileSizeBytes = args.Length > 1 && long.TryParse(args[1], out var num)
+var fileSizeBytes = args.Length > 0 && long.TryParse(args[0], out var num)
     ? num
     : 3_221_225_472; // 3 GiB
 
