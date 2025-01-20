@@ -1,23 +1,28 @@
-﻿using ExternalSort.Generator;
+﻿using System.Text;
+using ExternalSort.Generator;
 
-var numberOfLines = args.Length > 1 && int.TryParse(args[1], out var num)
+var fileSizeBytes = args.Length > 1 && long.TryParse(args[1], out var num)
     ? num
-    : 100_000_000;
+    : 3_221_225_472; // 3 GiB
 
-Console.WriteLine($"Generating {numberOfLines:N0} lines");
+Console.WriteLine($"Generating a file of size {fileSizeBytes:N0} bytes");
 
 var startTimestamp = DateTime.Now;
 var wordRandomizer = new WordRandomizer();
+var writtenBytes = 0L;
 using var stream = new FileStream("input.txt", FileMode.Create, FileAccess.Write, FileShare.None);
-using var writer = new StreamWriter(stream);
+using var writer = new StreamWriter(stream, Encoding.Unicode);
 
-for (var i = 0; i < numberOfLines; ++i)
+while (writtenBytes < fileSizeBytes)
 {
     var number = Random.Shared.Next(1, 1000000);
     var adjective = wordRandomizer.NextAdjective();
     var noun = wordRandomizer.NextNoun();
+    var line = $"{number}. {adjective} {noun}";
     
-    writer.WriteLine($"{number}. {adjective} {noun}");
+    writer.WriteLine(line);
+    
+    writtenBytes += line.Length * 2;
 }
 
 var spentMs = (DateTime.Now - startTimestamp).TotalMilliseconds;
