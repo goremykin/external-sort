@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 #if OS_WINDOWS
 using System.Diagnostics;
 #endif
@@ -40,6 +41,7 @@ public static class ResourceCalculator
         return DefaultUsableMemoryMb;
     }
     #elif OS_WINDOWS
+    [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
     public static int GetUsableMemoryMb()
     {
         var availableMemoryCounter = new PerformanceCounter("Memory", "Available MBytes");
