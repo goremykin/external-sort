@@ -1,4 +1,4 @@
-namespace ExternalSort.Sorter.Sorters;
+namespace ExternalSort.Contracts;
 
 public interface ISorter
 {

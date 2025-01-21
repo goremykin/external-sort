@@ -1,4 +1,4 @@
-﻿using ExternalSort.Sorter.Sorters;
+﻿using ExternalSort.LinuxSorter;
 
 if (args.Length < 2)
 {

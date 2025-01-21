@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
 using CliWrap;
+using ExternalSort.Contracts;
+using ExternalSort.Shared;
 
-namespace ExternalSort.Sorter.Sorters;
+namespace ExternalSort.LinuxSorter;
 
 public class LinuxSorter : ISorter
 {
