@@ -1,4 +1,4 @@
-﻿using ExternalSort.Sorter;
+﻿using ExternalSort.Sorter.Sorters;
 
 if (args.Length < 2)
 {
