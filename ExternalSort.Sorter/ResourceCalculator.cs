@@ -8,6 +8,7 @@ namespace ExternalSort.Sorter;
 public static class ResourceCalculator
 {
     private const int DefaultUsableMemoryMb = 512;
+    private const float MemoryMultiplier = 0.5f;
     
     public static int GetUsableCores()
     {
@@ -35,7 +36,7 @@ public static class ResourceCalculator
 
         if (int.TryParse(parts[1], out var memoryKb))
         {
-            return (int)(memoryKb / 1024.0 * 0.8);
+            return (int)(memoryKb / 1024.0 * MemoryMultiplier);
         }
 
         return DefaultUsableMemoryMb;
@@ -47,7 +48,7 @@ public static class ResourceCalculator
         var availableMemoryCounter = new PerformanceCounter("Memory", "Available MBytes");
         var availableMemory = availableMemoryCounter.NextValue();
 
-        return (int)(availableMemory * 0.8);
+        return (int)(availableMemory * MemoryMultiplier);
     }
     #else
     public static int GetUsableMemoryMb()
