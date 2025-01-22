@@ -3,10 +3,12 @@ namespace ExternalSort.CustomSorter;
 public class Sorter
 {
     private readonly int _parallelism;
-    
-    public Sorter(int parallelism)
+    private readonly IComparer<string> _comparer;
+
+    public Sorter(int parallelism, IComparer<string> comparer)
     {
         _parallelism = parallelism;
+        _comparer = comparer;
     }
     
     public void SortFiles(IReadOnlyCollection<string> paths)
@@ -23,8 +25,10 @@ public class Sorter
     
     private void SortFile(string path)
     {
+        Console.WriteLine($"Starting sort for {Path.GetFileName(path)}");
+        var start = DateTime.Now;
         var lines = File.ReadAllLines(path);
-        Array.Sort(lines);
+        Array.Sort(lines, _comparer);
         
         using var stream = File.Open(path, FileMode.Create);
         using var writer = new StreamWriter(stream);
@@ -33,5 +37,7 @@ public class Sorter
         {
             writer.WriteLine(line);
         }
+        
+        Console.WriteLine($"Finished sorting of {Path.GetFileName(path)} in {(DateTime.Now - start).TotalMilliseconds}ms");
     }
 }

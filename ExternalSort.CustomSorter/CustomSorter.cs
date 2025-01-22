@@ -24,7 +24,8 @@ public class CustomSorter : ISorter
         var tempDir = Directory.CreateTempSubdirectory().FullName;
         var tempFiles = Splitter.Split(inputPath, tempDir, linesPerChunk);
         Console.WriteLine($"Number of chunks: {tempFiles.Count}");
-        var sorter = new Sorter(usableCores);
+        var comparer = new LineComparer();
+        var sorter = new Sorter(usableCores, comparer);
 
         sorter.SortFiles(tempFiles);
         
