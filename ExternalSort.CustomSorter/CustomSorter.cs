@@ -1,26 +1,40 @@
-﻿using ExternalSort.Contracts;
+﻿using System.Diagnostics;
+using ExternalSort.Contracts;
 using ExternalSort.Shared;
 
 namespace ExternalSort.CustomSorter;
 
 public class CustomSorter : ISorter
 {
-    public async Task SortAsync(string inputPath, string outputPath)
+    private const int AverageLineSize = 32 * 2 + 20;
+    
+    public Task SortAsync(string inputPath, string outputPath)
     {
-        var inputFile = new FileInfo(inputPath);
+        var usableCores = ResourceCalculator.GetUsableCores();
         var usableMemoryMb = ResourceCalculator.GetUsableMemoryMb();
+        Console.WriteLine($"Usable Memory: {usableMemoryMb}");
         var realisticMemoryBytes = (long)(usableMemoryMb * .75) * 1024 * 1024;
-
-        if (inputFile.Length <= realisticMemoryBytes)
-        {
-            // todo: sort in memory
-        }
-
-        var chunkSize = inputFile.Length / realisticMemoryBytes; // todo: adjust
+        Console.WriteLine($"Realistic Memory: {realisticMemoryBytes / 1024 / 1024} MB");
+        var inputFile = new FileInfo(inputPath);
+        var maxLinesFitMemory = realisticMemoryBytes / AverageLineSize;
+        var approximateFileLines = inputFile.Length / AverageLineSize;
+        var linesPerChunk = Math.Min(maxLinesFitMemory, approximateFileLines) / usableCores;
+        
         var tempDir = Directory.CreateTempSubdirectory().FullName;
-        var splitter = new Splitter();
-        var tempFiles = splitter.Split(inputPath, tempDir, chunkSize);
+        var tempFiles = Splitter.Split(inputPath, tempDir, linesPerChunk);
+        var sorter = new Sorter(usableCores);
 
-        Directory.Delete(tempDir);
+        sorter.SortFiles(tempFiles);
+        
+        Directory.Delete(tempDir, recursive: true);
+        MemoryUsage();
+        
+        return Task.CompletedTask;
+    }
+    
+    void MemoryUsage()
+    {
+        Console.WriteLine(
+            $"{Process.GetCurrentProcess().PeakWorkingSet64 / 1024 / 1024} MB peak working set | {Process.GetCurrentProcess().PrivateMemorySize64 / 1024 / 1024} MB private bytes");
     }
 }

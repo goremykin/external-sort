@@ -8,7 +8,7 @@ namespace ExternalSort.Shared;
 public static class ResourceCalculator
 {
     private const int DefaultUsableMemoryMb = 512;
-    private const float MemoryMultiplier = 0.5f;
+    private const float MemoryMultiplier = 0.9f;
     
     public static int GetUsableCores()
     {
