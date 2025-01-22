@@ -6,7 +6,8 @@ namespace ExternalSort.CustomSorter;
 
 public class CustomSorter : ISorter
 {
-    private const int AverageLineSize = 32 * 2 + 20;
+    private const int AverageLineLength = 27;
+    private const int AverageLineSizeInMem = AverageLineLength * 3; // very roughly
     
     public Task SortAsync(string inputPath, string outputPath)
     {
@@ -16,12 +17,13 @@ public class CustomSorter : ISorter
         var realisticMemoryBytes = (long)(usableMemoryMb * .75) * 1024 * 1024;
         Console.WriteLine($"Realistic Memory: {realisticMemoryBytes / 1024 / 1024} MB");
         var inputFile = new FileInfo(inputPath);
-        var maxLinesFitMemory = realisticMemoryBytes / AverageLineSize;
-        var approximateFileLines = inputFile.Length / AverageLineSize;
+        var maxLinesFitMemory = realisticMemoryBytes / AverageLineSizeInMem;
+        var approximateFileLines = inputFile.Length / AverageLineLength;
         var linesPerChunk = Math.Min(maxLinesFitMemory, approximateFileLines) / usableCores;
         
         var tempDir = Directory.CreateTempSubdirectory().FullName;
         var tempFiles = Splitter.Split(inputPath, tempDir, linesPerChunk);
+        Console.WriteLine($"Number of chunks: {tempFiles.Count}");
         var sorter = new Sorter(usableCores);
 
         sorter.SortFiles(tempFiles);
