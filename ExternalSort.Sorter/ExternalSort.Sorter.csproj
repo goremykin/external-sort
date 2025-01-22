@@ -9,6 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\ExternalSort.CustomSorter\ExternalSort.CustomSorter.csproj" />
       <ProjectReference Include="..\ExternalSort.LinuxSorter\ExternalSort.LinuxSorter.csproj" />
     </ItemGroup>
 

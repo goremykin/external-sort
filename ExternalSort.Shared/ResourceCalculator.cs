@@ -36,7 +36,8 @@ public static class ResourceCalculator
 
         if (int.TryParse(parts[1], out var memoryKb))
         {
-            return (int)(memoryKb / 1024.0 * MemoryMultiplier);
+            var usable = (int)(memoryKb / 1024.0 * MemoryMultiplier);
+            return Math.Max(usable, DefaultUsableMemoryMb);
         }
 
         return DefaultUsableMemoryMb;
@@ -47,8 +48,9 @@ public static class ResourceCalculator
     {
         var availableMemoryCounter = new PerformanceCounter("Memory", "Available MBytes");
         var availableMemory = availableMemoryCounter.NextValue();
+        var usable = (int)(availableMemory * MemoryMultiplier);
 
-        return (int)(availableMemory * MemoryMultiplier);
+        return Math.Max(usable, DefaultUsableMemoryMb);
     }
     #else
     public static int GetUsableMemoryMb()

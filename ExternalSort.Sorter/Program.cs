@@ -1,4 +1,5 @@
-﻿using ExternalSort.LinuxSorter;
+﻿using ExternalSort.CustomSorter;
+using ExternalSort.LinuxSorter;
 
 if (args.Length < 2)
 {
@@ -16,7 +17,7 @@ if (!File.Exists(inputPath))
 }
 
 var startTimestamp = DateTime.Now;
-var sorter = new LinuxSorter();
+var sorter = new CustomSorter();
 
 await sorter.SortAsync(inputPath, outputPath);
 
