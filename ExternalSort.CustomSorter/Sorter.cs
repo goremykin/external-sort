@@ -13,6 +13,8 @@ public class Sorter
     
     public void SortFiles(IReadOnlyCollection<string> paths)
     {
+        Console.WriteLine("Staring sorting");
+        
         var start = DateTime.Now;
         var options = new ParallelOptions
         {
@@ -20,13 +22,13 @@ public class Sorter
         };
 
         Parallel.ForEach(paths, options, SortFile);
-        Console.WriteLine($"Finished sorting in {(DateTime.Now - start).TotalMilliseconds}ms");
+
+        var spent = (DateTime.Now - start).TotalSeconds;
+        Console.WriteLine($"Finished sorting in {spent}s");
     }
     
     private void SortFile(string path)
     {
-        Console.WriteLine($"Starting sort for {Path.GetFileName(path)}");
-        var start = DateTime.Now;
         var lines = File.ReadAllLines(path);
         Array.Sort(lines, _comparer);
         
@@ -36,8 +38,5 @@ public class Sorter
         {
             writer.WriteLine(line);
         }
-        
-        Console.WriteLine($"Finished sorting of {Path.GetFileName(path)} in {(DateTime.Now - start).TotalMilliseconds}ms");
-        Console.WriteLine($"Total memory {GC.GetTotalMemory(true) / 1024 / 1024} MB");
     }
 }

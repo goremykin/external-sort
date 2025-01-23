@@ -11,6 +11,9 @@ public class Merger
 
     public void Merge(IReadOnlyCollection<string> paths, string outputPath)
     {
+        Console.WriteLine("Starting merging");
+        
+        var start = DateTime.Now;
         var queue = new PriorityQueue<StreamReader, string>(_comparer);
 
         try
@@ -46,6 +49,9 @@ public class Merger
             {
                 reader.Dispose();
             }
+            
+            var spent = (DateTime.Now - start).TotalSeconds;
+            Console.WriteLine($"Finished merging in {spent:N0}s");
         }
     }
 }

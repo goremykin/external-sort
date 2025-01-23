@@ -15,6 +15,8 @@ public static class RootCommandHandler
             _ => new CustomSorter.CustomSorter(memoryMb.Value, parallelism.Value)
         };
         
+        Console.WriteLine($"Starting sorting with {sorter.GetType().Name} (Memory MB: {memoryMb}, Parallelism: {parallelism})");
+        
         var startTimestamp = DateTime.Now;
         
         await sorter.SortAsync(inputPath, outputPath);
