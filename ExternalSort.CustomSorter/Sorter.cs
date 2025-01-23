@@ -30,8 +30,7 @@ public class Sorter
         var lines = File.ReadAllLines(path);
         Array.Sort(lines, _comparer);
         
-        using var stream = File.Open(path, FileMode.Create);
-        using var writer = new StreamWriter(stream);
+        using var writer = new StreamWriter(path, append: false);
 
         foreach (var line in lines)
         {
@@ -39,5 +38,6 @@ public class Sorter
         }
         
         Console.WriteLine($"Finished sorting of {Path.GetFileName(path)} in {(DateTime.Now - start).TotalMilliseconds}ms");
+        Console.WriteLine($"Total memory {GC.GetTotalMemory(true) / 1024 / 1024} MB");
     }
 }

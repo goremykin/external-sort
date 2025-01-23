@@ -6,8 +6,7 @@ public static class Splitter
     {
         var start = DateTime.Now;
         var resultPaths = new List<string>();
-        using var inputStream = File.OpenRead(inputPath);
-        using var reader = new StreamReader(inputStream);
+        using var reader = new StreamReader(inputPath);
 
         while (!reader.EndOfStream)
         {

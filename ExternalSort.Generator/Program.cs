@@ -9,8 +9,7 @@ Console.WriteLine($"Generating a file of size {fileSizeBytes:N0} bytes");
 var startTimestamp = DateTime.Now;
 var wordRandomizer = new WordRandomizer();
 var writtenBytes = 0L;
-using var stream = new FileStream("input.txt", FileMode.Create, FileAccess.Write, FileShare.None);
-using var writer = new StreamWriter(stream);
+using var writer = new StreamWriter("input.txt", append: false);
 
 while (writtenBytes < fileSizeBytes)
 {

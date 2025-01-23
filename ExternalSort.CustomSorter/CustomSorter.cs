@@ -26,8 +26,10 @@ public class CustomSorter : ISorter
         Console.WriteLine($"Number of chunks: {tempFiles.Count}");
         var comparer = new LineComparer();
         var sorter = new Sorter(usableCores, comparer);
+        var merger = new Merger(comparer);
 
         sorter.SortFiles(tempFiles);
+        merger.Merge(tempFiles, outputPath);
         
         Directory.Delete(tempDir, recursive: true);
         MemoryUsage();
