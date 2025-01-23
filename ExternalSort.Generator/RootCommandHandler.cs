@@ -10,7 +10,7 @@ public static class RootCommandHandler
         var wordRandomizer = new WordRandomizer();
         var fileSizeBytes = (long)sizeGb * 1024 * 1024 * 1024;
         var writtenBytes = 0L;
-        using var writer = new StreamWriter("input.txt", append: false);
+        using var writer = new StreamWriter(outputPath, append: false);
 
         while (writtenBytes < fileSizeBytes)
         {
