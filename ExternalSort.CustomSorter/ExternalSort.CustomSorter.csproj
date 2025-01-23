@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\ExternalSort.Contracts\ExternalSort.Contracts.csproj" />
-      <ProjectReference Include="..\ExternalSort.Shared\ExternalSort.Shared.csproj" />
     </ItemGroup>
 
 </Project>

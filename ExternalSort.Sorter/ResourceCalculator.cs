@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics;
 #endif
 
-namespace ExternalSort.Shared;
+namespace ExternalSort.Sorter;
 
 public static class ResourceCalculator
 {

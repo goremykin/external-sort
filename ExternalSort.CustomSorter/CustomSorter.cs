@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using ExternalSort.Contracts;
-using ExternalSort.Shared;
 
 namespace ExternalSort.CustomSorter;
 
@@ -9,23 +8,30 @@ public class CustomSorter : ISorter
     private const int AverageLineLength = 27;
     private const int AverageLineSizeInMem = AverageLineLength * 3; // very roughly
     
+    private readonly int _memoryMb;
+    private readonly int _parallelism;
+
+    public CustomSorter(int memoryMb, int parallelism)
+    {
+        _memoryMb = memoryMb;
+        _parallelism = parallelism;
+    }
+    
     public Task SortAsync(string inputPath, string outputPath)
     {
-        var usableCores = ResourceCalculator.GetUsableCores();
-        var usableMemoryMb = ResourceCalculator.GetUsableMemoryMb();
-        Console.WriteLine($"Usable Memory: {usableMemoryMb}");
-        var realisticMemoryBytes = (long)(usableMemoryMb * .75) * 1024 * 1024;
+        Console.WriteLine($"Usable Memory: {_memoryMb}");
+        var realisticMemoryBytes = (long)(_memoryMb * .75) * 1024 * 1024;
         Console.WriteLine($"Realistic Memory: {realisticMemoryBytes / 1024 / 1024} MB");
         var inputFile = new FileInfo(inputPath);
         var maxLinesFitMemory = realisticMemoryBytes / AverageLineSizeInMem;
         var approximateFileLines = inputFile.Length / AverageLineLength;
-        var linesPerChunk = Math.Min(maxLinesFitMemory, approximateFileLines) / usableCores;
+        var linesPerChunk = Math.Min(maxLinesFitMemory, approximateFileLines) / _parallelism;
         
         var tempDir = Directory.CreateTempSubdirectory().FullName;
         var tempFiles = Splitter.Split(inputPath, tempDir, linesPerChunk);
         Console.WriteLine($"Number of chunks: {tempFiles.Count}");
         var comparer = new LineComparer();
-        var sorter = new Sorter(usableCores, comparer);
+        var sorter = new Sorter(_parallelism, comparer);
         var merger = new Merger(comparer);
 
         sorter.SortFiles(tempFiles);

@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalSort.LinuxSorter", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalSort.Contracts", "ExternalSort.Contracts\ExternalSort.Contracts.csproj", "{F6547C70-E2CE-4FF4-B583-5AFA8D8DCAEE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalSort.Shared", "ExternalSort.Shared\ExternalSort.Shared.csproj", "{D8F07D9F-8E74-406C-8EDC-FD86F5FF80C2}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExternalSort.CustomSorter", "ExternalSort.CustomSorter\ExternalSort.CustomSorter.csproj", "{7800E839-CAB6-4476-9FBD-EA15C5F90C9C}"
 EndProject
 Global
@@ -34,10 +32,6 @@ Global
 		{F6547C70-E2CE-4FF4-B583-5AFA8D8DCAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6547C70-E2CE-4FF4-B583-5AFA8D8DCAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6547C70-E2CE-4FF4-B583-5AFA8D8DCAEE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D8F07D9F-8E74-406C-8EDC-FD86F5FF80C2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D8F07D9F-8E74-406C-8EDC-FD86F5FF80C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D8F07D9F-8E74-406C-8EDC-FD86F5FF80C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D8F07D9F-8E74-406C-8EDC-FD86F5FF80C2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7800E839-CAB6-4476-9FBD-EA15C5F90C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7800E839-CAB6-4476-9FBD-EA15C5F90C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7800E839-CAB6-4476-9FBD-EA15C5F90C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -22,5 +22,5 @@ var rootCommand = new RootCommand("Generates a file for external sort")
     outputOption
 };
 
-rootCommand.SetHandler(Generator.Generate, sizeOption, outputOption);
+rootCommand.SetHandler(RootCommandHandler.Handle, sizeOption, outputOption);
 await rootCommand.InvokeAsync(args);

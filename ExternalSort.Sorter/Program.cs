@@ -1,26 +1,57 @@
-﻿using ExternalSort.CustomSorter;
-using ExternalSort.LinuxSorter;
+﻿using System.CommandLine;
+using ExternalSort.Sorter;
 
-if (args.Length < 2)
+var inputOption = new Option<string>("--input")
 {
-    Console.WriteLine("Please provide input and output paths");
-    return;
-}
-
-var inputPath = args[0];
-var outputPath = args[1];
-
-if (!File.Exists(inputPath))
+    Description = "Path to an input file",
+    IsRequired = true
+};
+inputOption.AddAlias("-i");
+inputOption.AddValidator(result  =>
 {
-    Console.WriteLine("Invalid input path");
-    return;
-}
+    var inputPath = result.GetValueOrDefault<string>();
 
-var startTimestamp = DateTime.Now;
-var sorter = new CustomSorter();
+    if (!File.Exists(inputPath))
+    {
+        result.ErrorMessage = "Invalid input path";
+    }
+});
 
-await sorter.SortAsync(inputPath, outputPath);
+var outputOption = new Option<string>("--output")
+{
+    Description = "Path to an output file",
+};
+outputOption.AddAlias("-o");
+outputOption.SetDefaultValue("output.txt");
 
-var spent = (DateTime.Now - startTimestamp).TotalMilliseconds;
+var sorterOption = new Option<string>("--sorter")
+{
+    Description = "Sorter implementation. Possible values: custom, linux. Custom is manually implemented, Linux uses built-in linux sort utility",
+};
+sorterOption.AddAlias("-s");
+sorterOption.SetDefaultValue("custom");
 
-Console.WriteLine($"Done in {spent} ms");
+var memoryOption = new Option<int?>("--memory")
+{
+    Description = "The amount of RAM that can be used for sorting. Will be determined automatically if not specified"
+};
+memoryOption.AddAlias("-m");
+
+var parallelismOption = new Option<int?>("--parallelism")
+{
+    Description = "The number of cores that can be used for sorting. Will be determined automatically if not specified"
+};
+parallelismOption.AddAlias("-p");
+
+var rootCommand = new RootCommand("Performs sorting of a large file")
+{
+    inputOption,
+    outputOption,
+    sorterOption,
+    memoryOption,
+    parallelismOption,
+};
+
+rootCommand.SetHandler(RootCommandHandler.Handle, inputOption, outputOption, sorterOption, memoryOption, parallelismOption);
+
+rootCommand.Invoke(args);

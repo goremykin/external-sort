@@ -1,8 +1,8 @@
 namespace ExternalSort.Generator;
 
-public class Generator
+public static class RootCommandHandler
 {
-    public static void Generate(int sizeGb, string outputPath)
+    public static void Handle(int sizeGb, string outputPath)
     {
         Console.WriteLine($"Generating a file of size {sizeGb} GB");
         

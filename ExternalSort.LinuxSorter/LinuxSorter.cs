@@ -1,12 +1,20 @@
 using System.Runtime.InteropServices;
 using CliWrap;
 using ExternalSort.Contracts;
-using ExternalSort.Shared;
 
 namespace ExternalSort.LinuxSorter;
 
 public class LinuxSorter : ISorter
 {
+    private readonly int _memoryMb;
+    private readonly int _parallelism;
+
+    public LinuxSorter(int memoryMb, int parallelism)
+    {
+        _memoryMb = memoryMb;
+        _parallelism = parallelism;
+    }
+    
     public async Task SortAsync(string inputPath, string outputPath)
     {
         if (!RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
@@ -14,13 +22,10 @@ public class LinuxSorter : ISorter
             throw new NotSupportedException("Non linux based systems are not supported");
         }
         
-        var usableMemoryMb = ResourceCalculator.GetUsableMemoryMb();
-        var usableCores = ResourceCalculator.GetUsableCores();
-        
         await Cli.Wrap("sort")
             .WithArguments([
-                "--parallel", usableCores.ToString(),
-                "-S", $"{usableMemoryMb}M",
+                "--parallel", _parallelism.ToString(),
+                "-S", $"{_memoryMb}M",
                 "-t", ".",
                 "-k2", "-k1n",
                 inputPath
