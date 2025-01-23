@@ -38,5 +38,8 @@ public class Sorter
         {
             writer.WriteLine(line);
         }
+
+        lines = null;
+        GC.Collect();
     }
 }
