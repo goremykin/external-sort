@@ -1,28 +1,26 @@
-﻿using ExternalSort.Generator;
+﻿using System.CommandLine;
+using ExternalSort.Generator;
 
-var fileSizeBytes = args.Length > 0 && long.TryParse(args[0], out var num)
-    ? num
-    : 3_221_225_472; // 3 GiB
-
-Console.WriteLine($"Generating a file of size {fileSizeBytes:N0} bytes");
-
-var startTimestamp = DateTime.Now;
-var wordRandomizer = new WordRandomizer();
-var writtenBytes = 0L;
-using var writer = new StreamWriter("input.txt", append: false);
-
-while (writtenBytes < fileSizeBytes)
+var sizeOption = new Option<int>("--size")
 {
-    var number = Random.Shared.Next(1, 1000000);
-    var adjective = wordRandomizer.NextAdjective();
-    var noun = wordRandomizer.NextNoun();
-    var line = $"{number}. {adjective} {noun}";
+    Description = "File size in gigabytes",
     
-    writer.WriteLine(line);
-    
-    writtenBytes += line.Length;
-}
+};
+sizeOption.SetDefaultValue(10);
+sizeOption.AddAlias("-s");
 
-var spentMs = (DateTime.Now - startTimestamp).TotalMilliseconds;
+var outputOption = new Option<string>("--output")
+{
+    Description = "Output file path"
+};
+outputOption.SetDefaultValue("input.txt");
+outputOption.AddAlias("-o");
 
-Console.WriteLine($"Done in {spentMs:N} ms");
+var rootCommand = new RootCommand("Generates a file for external sort")
+{
+    sizeOption,
+    outputOption
+};
+
+rootCommand.SetHandler(Generator.Generate, sizeOption, outputOption);
+await rootCommand.InvokeAsync(args);
